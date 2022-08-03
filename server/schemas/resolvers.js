@@ -7,7 +7,7 @@ const resolvers = {
         me: async (parent, args, context) => {
             console.log(`Query me: ${context._id}`)
             if (context.user) {
-                return await User.findById(context._id).exec();
+                return User.findOne({_id: context.user._id});
             }
             throw new AuthenticationError('Cannot find a user with this id!');
         }
@@ -15,6 +15,22 @@ const resolvers = {
     Mutation: {
         addUser: async (parent, {username, email, password}) => {
             const user = await User.create({username, email, password});
+            const token = signToken(user);
+            return {token, user};
+        },
+        login: async(parent, {email, password}) => {
+            const user = await User.findOne({email});
+
+            if (!user) {
+                throw new AuthenticationError('Can\'t find this user');
+            }
+
+            const correctPw = await user.isCorrectPassword(password);
+
+            if (!correctPw) {
+                throw new AuthenticationError('Wrong password!');
+            }
+
             const token = signToken(user);
             return {token, user};
         }

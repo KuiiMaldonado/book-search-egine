@@ -34,3 +34,17 @@ export const LOGIN_USER = gql`
         }
     }
 `;
+
+export const SAVE_BOOK = gql`
+    mutation saveBook($bookToSave: saveBookInput!){
+        saveBook(bookToSave: $bookToSave){
+            username
+            email
+            bookCount
+        }
+    }
+`;
+
+// export const REMOVE_BOOK = gql`
+//
+// `;

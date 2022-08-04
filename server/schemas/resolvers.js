@@ -41,7 +41,7 @@ const resolvers = {
                 {new: true}
             );
             console.log(updatedUser);
-            // return input;
+            return updatedUser;
         }
     }
 };
